@@ -18,10 +18,15 @@ func main() {
 		appMessage = "Hello, world!"
 	}
 
-	// Define handler
-	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+	// Define message handler
+	http.HandleFunc("/api/v1/message", func(w http.ResponseWriter, r *http.Request) {
 		fmt.Fprint(w, appMessage)
 	})
+
+	// Define static file handler
+	fs := http.FileServer(http.Dir("./static"))
+	http.Handle("/", fs)
+
 	// Listen and serve
 	fmt.Printf("Listening on port %s\n", appPort)
 	log.Fatal(http.ListenAndServe(fmt.Sprintf(":%s", appPort), nil))
